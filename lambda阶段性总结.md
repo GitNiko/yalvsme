@@ -1,9 +1,9 @@
 # lambda阶段总结 
-为了能够更好的掌握函数式编程，最近对lambda calculus 进行了基础的学习。主要参考wiki，[columbia大学教材的](http://www.cs.columbia.edu/~sedwards/classes/2012/w4115-summer/lambda.pdf)以及[ucsc的教材](https://classes.soe.ucsc.edu/cmps112/Spring03/readings/lambdacalculus/introduction.html)。
+为了能够更好的掌握函数式编程，最近对`lambda calculus`进行了基础的学习。主要参考wiki，[columbia大学教材的](http://www.cs.columbia.edu/~sedwards/classes/2012/w4115-summer/lambda.pdf)以及[ucsc的教材](https://classes.soe.ucsc.edu/cmps112/Spring03/readings/lambdacalculus/introduction.html)。
 这两篇都是入门的极佳教材。而wiki上的更加全面，但是比较难以理解。先看完两份教材后再回过头扫了下wiki作为知识梳理和补充。顺手作出了下面的思维导图
 ![思维导图](./asset/lambda/mind_lambda.png)
 
-## Y combinator 
+## Y combinator 
 作为函数式编程入门标志，还是有必要做一次 Y combinator的推导。先来份lambda calculus的推导。  
 ```hs
 -- y combinator的推导
@@ -40,7 +40,7 @@ y := \f.(\g.f (g g))(\g.f (g g))
 -- fac 5 就可以这样写
 y fac' 5
 
-```  
+``` 
 随后在es6上实现一次，然后过程却出现了一个问题。推导出来的函数并不能运行。先看下我最先的错误的推导
 ```javascript
 // js 中的推导
