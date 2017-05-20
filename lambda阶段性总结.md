@@ -40,8 +40,8 @@ y := \f.(\g.f (g g))(\g.f (g g))
 -- fac 5 就可以这样写
 y fac' 5
 
-``` 
-随后在es6上实现一次，然后过程却出现了一个问题。推导出来的函数并不能运行。先看下我最先的错误的推导
+```  
+随后在es6上实现一次，然后过程却出现了一个问题。推导出来的函数并不能运行。先看下我最先的错误的推导
 ```javascript
 // js 中的推导
 // 最初的递归
@@ -52,7 +52,7 @@ fac = f => n => n == 0 ? 1 : n * f(f)(n - 1);
 fac = (f => n => n == 0 ? 1 : n * f(f)(n - 1))(f => n => n == 0 ? 1 : n * f(f)(n - 1))
 // fac(5)
 fac = (f => (m => n => n == 0 ? 1 : n * m(n - 1))(f(f)))(f => (m => n => n == 0 ? 1 : n * m(n - 1))(f(f)))
-// 请原谅我是用facp 代表 fac' ，JS中'会转换成字符
+// 请原谅我是用facp 代表 fac' ，JS中'会转换成字符
 facp = m => n => n == 0 ? 1 : n * m(n - 1)
 fac = (f => facp(f(f)))(f => facp(f(f)))
 y = facp => (f => facp(f(f)))(f => facp(f(f)))
@@ -61,36 +61,36 @@ y = g => (f => g(f(f)))(f => g(f(f)))
 (y(facp))(5)
 // ...Maximum call stack size exceeded
 ```  
-怎么会这样呢？实际上是忽略了一个重要问题，JS的`Evaluation Strategies`和lambda的有很大区别的，也就是JS是先执行参数内的表达式后传递给函数去执行（被称为`Applicative Order,`，而我们默认的`Evaluation Strategies`是`Normal Order`  
+怎么会这样呢？实际上是忽略了一个重要问题，JS的`Evaluation Strategies`和lambda有很大区别的，也就是JS是先执行参数内的表达式后传递给函数去执行（被称为`Applicative Order,`，而我们默认的`Evaluation Strategies`是`Normal Order`  
 >Normal Order, also known as call by name,  an actual parameter is not evaluated before being passed to a function  
 
-正确的JS
+正确的JS
 ```javascript
 y = f => (y => f(x => y(y)(x)))(y => f(x => y(y)(x)))
 // 错误的
 y = f => (y => g(y(y)))(y => g(y(y)))
 // 为什么f(f)需要延迟执行，即再执行前先传给g ？
-// 看一下错误的执行过程
+// 看一下错误的执行过程
 ////////////////////////////////////////////////////
 (f => (y => f(y(y)))(y => f(y(y)))) p (5)
 (   (y => p(y(y)))(y => p(y(y)))  ) (5)
 (   p(    (y => p(y(y)))((y => p(y(y))))   )  ) (5)
 (   p(    (p  ((y => p(y(y)))((y => p(y(y))))) )   )  ) (5)
 // ...Maximum call stack size exceeded
-// 我们的p根本就没进去，自然也无法触发这个 0 == n 的终止条件了
-// 正确执行过程
+// 我们的p根本就没进去，自然也无法触发这个 0 == n 的终止条件了
+// 正确执行过程
 ///////////////////////////////////////////////////
 (f => (y => f(x => y(y)(x)))(y => f(x => y(y)(x)))) p (5)
 (y => p(x => y(y)(x)))(y => p(x => y(y)(x))) (5)
 (p ( x => (y => p(x => y(y)(x))) ( (y => p(x => y(y)(x))) )(x) )  ) (5)
 // 注意 (x => (y => p(x => y(y)(x))) ( (y => p(x => y(y)(x))) )(x)) 这个表达式是个函数定义,里面的内容只会被传入到p 中才会执行
-// 由于 p = m => n => n == 0 ? 1 : n * m(n - 1)
-((m => n => n == 0 ? 1 : n * m(n - 1)) ( x => (y => p(x => y(y)(x))) ( (y => p(x => y(y)(x))) )(x) )  ) (5)
-(n => n == 0 ? 1 : n * ( x => (y => p(x => y(y)(x))) ( (y => p(x => y(y)(x))) )(x) )(n - 1))  (5)
+// 由于 p = m => n => n == 0 ? 1 : n * m(n - 1)
+((m => n => n == 0 ? 1 : n * m(n - 1)) ( x => (y => p(x => y(y)(x))) ( (y => p(x => y(y)(x))) )(x) )  ) (5)
+(n => n == 0 ? 1 : n * ( x => (y => p(x => y(y)(x))) ( (y => p(x => y(y)(x))) )(x) )(n - 1))  (5)
 // 然后 5被传进来
-5 == 0 ? 1 : 5 * ( x => (y => p(x => y(y)(x))) ( (y => p(x => y(y)(x))) )(x) )(5 - 1)
-5 * ( x => (y => p(x => y(y)(x))) ( (y => p(x => y(y)(x))) )(x) )(4)
-5 * (y => p(x => y(y)(x))) ( (y => p(x => y(y)(x))) )(4)
+5 == 0 ? 1 : 5 * ( x => (y => p(x => y(y)(x))) ( (y => p(x => y(y)(x))) )(x) )(5 - 1)
+5 * ( x => (y => p(x => y(y)(x))) ( (y => p(x => y(y)(x))) )(x) )(4)
+5 * (y => p(x => y(y)(x))) ( (y => p(x => y(y)(x))) )(4)
 // ... 最终出发 0 == 0中断
 ```
 这个问题引起了我对pointfree在JS中使用的问题，本身`f(x => y(y)(x))` 就是 `f(y(y))` poinftfree下的结果，大部分场景都是相同的，
