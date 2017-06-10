@@ -24,7 +24,10 @@ code push 每次即将更新一个本地版本的时候，会自动备份当前�
 
 
 ## 更新策略
-可以通过JS代码开发更新过程的交互体验，默认是后台更新。android平台可以随意定制自己的更新策略。**然而走apple store的应用则需要注意不能显示的让用户感知到更新，否则会被平台审核拒绝**。
+可以通过JS代码开发更新过程的交互体验，默认是后台更新。android平台可以随意定制自己的更新策略。**然而走apple store的应用则需要注意不能显示的让用户感知到更新，否则会被平台审核拒绝**。  
+
+## 更新流程
+`code-push release-react thrall ios` 首先把代码推送到deployment上,然后通过`code-push promote thrall-ios Staging Production` 把已经推送到deployment上的版本更新到production上，这样才算把代码推送到线上环境。
 
 ##  更新时机
 默认是每次app进程启动的时候才检查更新，下载，等待下次进程启动的时候更新本地的JS。  
