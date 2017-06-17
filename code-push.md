@@ -10,7 +10,7 @@
 code push 每次即将更新一个本地版本的时候，会自动备份当前版本代码，如果本次更新失败，则会自动回退使用备份的那个版本的代码。
 
 ## 配置注意点
-* 全部操作都需要通过[cli](https://microsoft.github.io/code-push/docs/getting-started.html)，包括账号注册，app注册，app发布。   
+* 全部操作都需要通过[cli](https://microsoft.github.io/code-push/docs/getting-started.html)，包括账号注册，app注册，app发布。   
 * 一个app只能对应一个平台，即使这个app发布的时候可以指定平台ios/android。因为code push 的deployment 不区分平台。 
 
 > 
@@ -33,7 +33,10 @@ code push 每次即将更新一个本地版本的时候，会自动备份当前�
 默认是每次app进程启动的时候才检查更新，下载，等待下次进程启动的时候更新本地的JS。  
 也可以是每次app由后台唤起的时候检查更新，下载，等待下次进程启动的时候更新本地的JS。 
 当然也可以通过JS代码实现JS重新加载。   
-[具体参考](https://github.com/Microsoft/react-native-code-push#plugin-usage)
+[具体参考](https://github.com/Microsoft/react-native-code-push#plugin-usage)  
+### 指定更新的版本
+有这种场景，新上线一个版本改了原生的东西，需要重新发ipa/apk，并且我们推送了最新的包，然后旧的用户还没有下载新的ipa/apk，只是拉取JS，JS可能会调用不存在的原生的接口，这样踢来就会crash。
+当然这个已经考虑到了，code push的推送包可以指定版本号的。这样我们推送包的时候就可以指定我们最新的ipa/apk上的版本号，那么用户手中旧的版本的app是不会去更新JS的。 具体可以参考[targetBinaryVersion](https://github.com/Microsoft/code-push/tree/master/cli#target-binary-version-parameter)
 
 ## 更新过程记录android
 app启动,注意code push的log
