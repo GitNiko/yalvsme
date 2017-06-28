@@ -1,5 +1,6 @@
 如何接入travis-ci(在Github上的js项目)
 =========================
+~以下配置只在 mac os 下测试过~  
 ## 目录
 * 为什么需要CI
 * 为什么选择travis
@@ -141,4 +142,31 @@ codecov也支持在README.md中显示代码的覆盖率。只需要在README.md�
 ![build_status](./asset/travis-ci/build_status.png)
 
 ## 接入npm自动deploy
-开发完测试完就该发布了，一开始我们会在本地编译成es5的文件, 然后把这些文件通过`npm publish`发布到npm中。但是这个大包过程比较麻烦，需要在个人电脑中执行，一方面环境不干净;另一方面，只能在本人的电脑上通过本人的npm账号发布项目。我们想push完代码后，就自动化构建并且发布到npm上。这些需求，travis自然考虑到了，已经提供了现成的npm发布功能,只需要按一下步骤配置好就行了。
+开发完测试完就该发布了，一开始我们会在本地编译成es5的文件, 然后把这些文件通过`npm publish`发布到npm中。但是这个大包过程比较麻烦，需要在个人电脑中执行，一方面环境不干净;另一方面，只能在本人的电脑上通过本人的npm账号发布项目。我们想push完代码后，就自动化构建并且发布到npm上。这些需求，travis自然考虑到了，已经提供了现成的npm发布功能,只需要按以下步骤配置好就行了。
+```yml
+# ...
+# 发布前先执行我们在package.json中定义好的build脚本
+before_deploy:
+  - npm run build
+deploy:
+# 使用npm
+  provider: npm
+# npm 账号,确保我们再本地电脑中可以通过该账号发布到npm上
+  email: galxis.ling@gmail.com
+# npm 账号的的秘钥
+  api_key:
+    secure: 2A+iJKV4cKPceWXQppIFhAuPyJTbOxIiUAuMdf0T0plsOfX5jey11lTCAkSpgVVzfTwgrbXX2yesbU9319aJz+WG4iW3fWD0flT9aVvztbwxXu4bsw2/yp3/aIt+iBL64FA/jJ1iFARBObF+8dzpJh0rjaWXnrn6WAE6Cmb1t2N8kcx5Kq5hc9Xc44vQfxGwEITiAeUwCE3ILZxCA/V7gn8LjQfkOzHYfrUyns4TWZO61TvGjh759eeFOVA1NART46uxZOKemX08RPoFo2BE5d1y/8rluMWy86EQ/tkZ8STfXfwTLIFf9yepMcLOgVeGAbTRA3ZTSmdywpQvp5VqY/CBO98uWQ2p7nlH13U7F+wvmOP9FD+C80qVCXUFQr+9yl1gMzIHlyEhGWc8QPGGnFpoY1f3PBSOrPoQp5zAfqmlIb6+F1Uctov0nzpEbfMnIjeCWGD5UdOclToNFT9FKeR+yTHpmI+dc++ISC+87Bx+PZkmBqhoMu5Wjokl43rBGEa8C4L46WHcuHZILVedzVK1MUP1j+wxbqI8eTeLOoU1jFeeftWFJdeBrxE/8N6UfcryZcEFym20Y3FpCutiJkt1KBnLWxGls3QqfIuiamV4OXza0aTvjY0lDvzIfa7LqkJbPl6Nvqi6p/gWYoyajYwteuf1e+zUZMjtwmSUbWM=
+# 指定当push tags的时候才进行发布
+# 也可以指定分支
+  on:
+    tags: true
+```
+
+### 秘钥的生成
+`cat ~/.npmrc `能够看到`//registry.npmjs.org/:_authToken=your_token`。我们需要把这个token通过travis的工具加密，不然这个直接放在github上就被其他人看到了。  
+安装travis`gem install travis`, 加密`travis encrypt api_key="your_token"`, 会在终端输出一段秘文，把这段秘文加到api_key下的secure中就可以了。
+
+
+## 相关链接参考
+travis加密 https://docs.travis-ci.com/user/encryption-keys/#Usage
+npm deploy https://docs.travis-ci.com/user/deployment/npm/
