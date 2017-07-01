@@ -13,7 +13,7 @@
 ## 为什么需要CI
 ...http://www.ruanyifeng.com/blog/2015/09/continuous-integration.html
 ## 为什么选择travis
-类似的服务可以选择[circleci](https://circleci.com/), jenkins。想对与前两个[travis](https://travis-ci.org),没有执行速度上的优势,甚至是比较慢的。但是有个很大的好处就是环境独立，travis应该是docker玩的很溜了，每一次构建任务执行的时候都是重启一个干净的环境，它会从node开始安装，npm install 项目，从零配置的开始一步步构建我们的项目。甚至可以指定不同的node版本，对几个不同的版本进行构建。相对于其他CI总结下来：  
+类似的服务可以选择[circleci](https://circleci.com/), jenkins。相对与前两个[travis](https://travis-ci.org),没有执行速度上的优势,甚至是比较慢的。但是有个很大的好处就是环境独立，travis应该是docker玩的很溜了，每一次构建任务执行的时候都是重启一个干净的环境，它会从node开始安装，npm install 项目，从零配置的开始一步步构建我们的项目。甚至可以指定不同的node版本，对几个不同的版本进行构建。相对于其他CI总结下来：  
 - 每次构建都是干净的环境，能够有效避免错误  
 - 可以构建多个环境，指定多个版本的node环境，可以在不同的环境下运行我们的测试代码
 
@@ -31,7 +31,7 @@
 ### travis的项目主页
 上图标注的`1`的地方,也就是侧边栏处展示的是我们的项目。`#21`最近的一次构建任务的序号。`Duration`表示最近一次构建所花的时间。`Finished`表示最近一次构建完成的时间。
 
-标注`2`的黑色区域，就是构建任务执行的过程的记录，类似于一个终端的输出。其中能看到一些关键构建信息，和构建步骤。*如何发生构建失败的时候，可以通过查看这分记录来查到错误*
+标注`2`的黑色区域，就是构建任务执行的过程的记录，类似于一个终端的输出。其中能看到一些关键构建信息，和构建步骤。*如果发生构建失败的时候，可以通过查看这分记录来查到错误*
 
 ## 在仓库中添加.travis.yml
 如果仓库中没有`.travis.yml`，travis是不会执行构建的。 所以我们需要向项目内添加这个构建脚本，告诉travis要做哪些事。以下是一个范例：
@@ -71,7 +71,7 @@ deploy:
 ![build_status](./asset/travis-ci/build_status.png)
 
 ## 接入codecov
-假设我们已经些好了测试用例，本地执行能够生成一份测试报告共我们查看，但是travis上执行后所得到的测试报告我们是看不到（或者说只能在执行结果中查看），这不是很方便，我们需要一个专门用来收集测试报告的系统供我们查看，这个时候[codecov](https://codecov.io)登场了。*codecov网站使用了cloudfront，部分用户可能需要翻墙才能加载资源文件* 
+假设我们已经些好了测试用例，本地执行能够生成一份测试报告供我们查看，但是travis上执行后所得到的测试报告我们是看不到（或者说只能在执行结果中查看），这不是很方便，我们需要一个专门用来收集测试报告的系统供我们查看，这个时候[codecov](https://codecov.io)登场了。*codecov网站使用了cloudfront，部分用户可能需要翻墙才能加载资源文件* 
 
 进入codecov，用github账号登陆，并添加自己的仓库。
 
@@ -142,7 +142,7 @@ codecov也支持在README.md中显示代码的覆盖率。只需要在README.md�
 ![build_status](./asset/travis-ci/build_status.png)
 
 ## 接入npm自动deploy
-开发完测试完就该发布了，一开始我们会在本地编译成es5的文件, 然后把这些文件通过`npm publish`发布到npm中。但是这个大包过程比较麻烦，需要在个人电脑中执行，一方面环境不干净;另一方面，只能在本人的电脑上通过本人的npm账号发布项目。我们想push完代码后，就自动化构建并且发布到npm上。这些需求，travis自然考虑到了，已经提供了现成的npm发布功能,只需要按以下步骤配置好就行了。
+开发完测试完就该发布了，一开始我们会在本地编译成es5的文件, 然后把这些文件通过`npm publish`发布到npm中。但是这个打包过程比较麻烦，需要在个人电脑中执行，一方面环境不干净;另一方面，只能在本人的电脑上通过本人的npm账号发布项目。我们想push完代码后，就自动化构建并且发布到npm上。这些需求，travis自然考虑到了，已经提供了现成的npm发布功能,只需要按以下步骤配置好就行了。
 ```yml
 # ...
 # 发布前先执行我们在package.json中定义好的build脚本
@@ -168,5 +168,5 @@ deploy:
 
 
 ## 相关链接参考
-travis加密 https://docs.travis-ci.com/user/encryption-keys/#Usage
+travis加密 https://docs.travis-ci.com/user/encryption-keys/#Usage  
 npm deploy https://docs.travis-ci.com/user/deployment/npm/
