@@ -17,11 +17,11 @@ runner可以在多种平台上安装，我这里选择`docker service`的安装�
 ## 注册runner
 主要步骤参考最后的链接。这里说下文档中未提及到的注册的token是从哪儿来的。  
 登录gitlab管理员账号查看 `setting => overview => runners`
-![registration token]()
+![registration token](./asset/runner_in_docker/register_token.png)
 ## 激活项目的runner
 注册好runner后还需要让我们的项目能够使用runner,还是需要在gitlab管理员账号页面`enable`一下。 
-![enter edit]()
-![enbalbe runner]()
+![enter edit](./asset/runner_in_docker/enter_edit.png)
+![enbalbe runner](./asset/runner_in_docker/enable.png)
 ## 使用场景
 ### 打包adnroid/IOS
 首先我们要打包
