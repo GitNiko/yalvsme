@@ -23,9 +23,10 @@ runner可以在多种平台上安装，我这里选择`docker service`的安装�
 ![enter edit](./asset/runner_in_docker/enter_edit.png)
 ![enbalbe runner](./asset/runner_in_docker/enable.png)
 ## 使用场景
-### 打包adnroid/IOS
-首先我们要打包
+### 打包react-native adnroid
+选择一个配置好android环境和Node.js的环境的[镜像](https://hub.docker.com/r/dockerniko/gitlab-ci-react-native-android/)。然后在仓库根目录下添加`.gitlab-ci.yml`。添加其中加上如下类似的内容。
 ### 发布npm包
+选择一个Node.js环境的镜像
 ### 部署web项目
 
 ## 相关链接参考
