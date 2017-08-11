@@ -90,14 +90,14 @@ deploy_apk:
 
 ## gitlab上如何操作
 发起merge，然后同意合并后出出发了构建（出发一次pipleline）  
-可以看到一行pipleline就是一次构建，其中有构建的状态，点击状态(绿色的passed)可以进入该Pipeline，产看详细的Jobs  
-![pipelines](./asset/runner_in_docker/pipelines.png)
-看到具体的Jobs,每个Job是可以点击进去查看执行的日志
-![Jobs](./asset/runner_in_docker/jobs.png)
-里面有从头开始执行的记录，可以查看失败的原因
-![terminal](./asset/runner_in_docker/terminal.png)
+可以看到一行pipleline就是一次构建，其中有构建的状态，点击状态(绿色的passed)可以进入该Pipeline，产看详细的Jobs    
+![pipelines](./asset/runner_in_docker/pipelines.png)  
+看到具体的Jobs,每个Job是可以点击进去查看执行的日志  
+![Jobs](./asset/runner_in_docker/jobs.png)  
+里面有从头开始执行的记录，可以查看失败的原因  
+![terminal](./asset/runner_in_docker/terminal.png)  
 ## 相关链接参考
-[pipelines and jobs](https://docs.gitlab.com/ee/ci/pipelines.html)
-[git runner install](https://docs.gitlab.com/runner/install/index.html)
-[install in docker](https://docs.gitlab.com/runner/install/docker.html)
-[register runners](https://docs.gitlab.com/runner/register/index.html#docker)
+[pipelines and jobs](https://docs.gitlab.com/ee/ci/pipelines.html)  
+[git runner install](https://docs.gitlab.com/runner/install/index.html)  
+[install in docker](https://docs.gitlab.com/runner/install/docker.html)  
+[register runners](https://docs.gitlab.com/runner/register/index.html#docker)  
