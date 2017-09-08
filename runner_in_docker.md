@@ -70,7 +70,7 @@ android:
       - android/.gradle/caches
       - .yarn
       - ls -l
-  # 执行改任务的分支，当以下分支发生变化（merge, commit)的时候会出发Job
+  # 执行改任务的分支，当以下分支发生变化（merge, commit)的时候会触发Job
   only:
     - develop
     - release
@@ -89,7 +89,7 @@ deploy_apk:
 ```
 
 ## gitlab上如何操作
-发起merge，然后同意合并后出出发了构建（出发一次pipleline）  
+发起merge，然后同意合并后出触发了构建（触发一次pipleline）  
 可以看到一行pipleline就是一次构建，其中有构建的状态，点击状态(绿色的passed)可以进入该Pipeline，产看详细的Jobs    
 ![pipelines](./asset/runner_in_docker/pipelines.png)  
 看到具体的Jobs,每个Job是可以点击进去查看执行的日志  
