@@ -6,6 +6,7 @@
 * [关键字解释](keyword-explanation.md)
 * [travis-ci使用](travisci.md)
 * [使用yarn](use_yarn.md)  
+* [gitlab docker runner的配置](runner_in_docker.md)  
 
 
 ## 即将到来的章节
