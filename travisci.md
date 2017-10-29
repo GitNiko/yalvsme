@@ -166,6 +166,35 @@ deploy:
 `cat ~/.npmrc `能够看到`//registry.npmjs.org/:_authToken=your_token`。我们需要把这个token通过travis的工具加密，不然这个直接放在github上就被其他人看到了。  
 安装travis`gem install travis`, 加密`travis encrypt api_key="your_token"`, 会在终端输出一段秘文，把这段秘文加到api_key下的secure中就可以了。
 
+## 与CircleCI的一些区别  
+任务执行速度上还是CircleCI占优，如果对速度有特殊要求的项目当然首选还是CircleCI好些。  
+yaml配置上则各有特点， CircleCI更加接近GitlabCi，大部分执行脚本都需要自己写命令，没有像travis一样的`provider`可以直接使用。
+不过一些`deploy`相关的秘钥配置在CircleCI上配置起来比较简单，只需要登陆网页后台设置对应的秘钥变量，就可以在脚本中访问秘钥了。  
+一个简答的CircleCI的例子：  
+```yml
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:6-browsers
+    steps:
+      - checkout
+      - run: echo "hello world"
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run: sudo npm install -g yarn
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run: yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: npm run build
+      - run: npm publish
+    branches:
+      only:
+        - release
+```
 
 ## 相关链接参考
 travis加密 https://docs.travis-ci.com/user/encryption-keys/#Usage  
