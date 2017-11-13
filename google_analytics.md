@@ -18,7 +18,22 @@ SPA(single page web application)在网站流量分析上远不如静态页面那
 基于`Google Analytics`,`GTM`可以有效的管理我们用于统计的代码了, 最大的好处就是我们的统计代码是实时的被加载的。我们在`GTM`上配置好统计代码,点击发布后 嵌入页面的统计代码也会`更新`成最新的。我们可以放心的把调用统计接口的逻辑从我们的项目中剔除出去了。
 
 ## 机制
+页面加载的时候会通过`tagId`异步加载统计代码,这些代码中包含了我们在`Google Tag Manager`服务器上配置的内容（包括自定义的代码），并且官网上提供了一套简单的操作就可以添加各种追踪代码，不需要在手写JS代码。  
 
+## GTM中的名次解释
+### tag
+> A tag is a snippet of code that sends information to a third party, such as Google.  
+
+其实就是用来收集信息并发送给第三方平台的片段代码。
+
+### trigger
+>A trigger is a condition that evaluates to either true or false at runtime. It does this by comparing the value in a variable with the value that you specified when you defined the trigger  
+
+页面上的触发器，可以监听页面的状态变换和事件（DOM Ready, Click, History Change, JavaScript Error等)
+
+## variables
+>A Tag Manager variable is a configured name-value pair for which the value is populated during runtime. 
+变量，可以在配置trigger和tag的时候使用。预设了很多变量(Page Path, Page URL等), 还可以自定义一个返回一个值的函数作为变量。
 
 ## GTM使用
 
