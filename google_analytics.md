@@ -1,4 +1,4 @@
-谷歌分析
+Google Tage Manager
 =======================
 SPA(single page web application)在网站流量分析上远不如静态页面那么方便，直接在Html标签上加上统计的代码(百度统计，CNZZ，GA之类的)就可以统计到用户各个页面的访问量，停留时间等等。然后SPA通常使用的是HashRouter(/#/somerouter)的这种方式，这样统计代码就无法统计到页面其他的前端路由的访问了。
 
@@ -10,6 +10,8 @@ SPA(single page web application)在网站流量分析上远不如静态页面那
 
 当然，这也是有相对应的解决方法。一般统计代码都会暴露出对应的接口，让开发者能够主动发送统计请求。所以，一般会在通过`HashChangeEvent`的方式添加一个监听函数，只要是路由有变化就调用一下统计接口。
 
+*如果前端路由使用`HistoryAPI`则可以省略下文中获取前端路由的配置。*
+
 ## GTM(Google Tag Manager)
 上面的解决方案并不合理，显式的调用统计接口的逻辑明显会`污染`我们的代码，当统计内容，统计接口改的时候我们还需要更新我们的代码。如果代码重构，还需要考虑到这方面的逻辑。  
 
@@ -20,7 +22,7 @@ SPA(single page web application)在网站流量分析上远不如静态页面那
 ## 机制
 页面加载的时候会通过`tagId`异步加载统计代码,这些代码中包含了我们在`Google Tag Manager`服务器上配置的内容（包括自定义的代码），并且官网上提供了一套简单的操作就可以添加各种追踪代码，不需要在手写JS代码。  
 
-## GTM中的名次解释
+## GTM中的名词解释
 ### tag
 > A tag is a snippet of code that sends information to a third party, such as Google.  
 
@@ -36,7 +38,45 @@ SPA(single page web application)在网站流量分析上远不如静态页面那
 变量，可以在配置trigger和tag的时候使用。预设了很多变量(Page Path, Page URL等), 还可以自定义一个返回一个值的函数作为变量。
 
 ## GTM使用
+进入`tagmanager.google.com`开启自己的账号，跟随引导创建`container`后进入到主页面`workspace`
+
+### 获取GTM-XXX容器编号和代码片段
+在截图又上有个GTM-xxx的链接,打开后会弹出片段代码,按照提示插入到我们的网页中。  
+
+![workspace](./asset/google_analytics/workspace.png)  
+
+### 点右上角发布我们的代码片段
+按照提示一路操作下去直到发布成功,然后启动我们的网页,查看请求gtm的请求是否成功返回,如果成功返回则基本配置完成,不需要再修改我们的网页代码了。
+
+### 配置Variables
+进入`Variables`的配置单中,增加一个`User-Defined Variables`。选择`variable type`为`Google Analytics Settings`。`Tracking ID `就填谷歌分析中的ID(因为我们用的分析平台是谷歌分析)。这个变量以后会经常用到。
+
+在配置一个变量，用来获取前端路由。选择`variable type`为`Custom JavaScript`并填入以下代码片段。  
+```js
+  function() {
+    // 获取#后的字符串
+    return window.location.hash.replace('#', '').split('?')[0]
+  }
+```
+
+### 配置Triggers
+进入`Triggers`配置单中,增加一个`Trigger`,并选择`Trigger Type`为`History Change`(也就是window.history变化时会被触发)  
+
+![trigger](./asset/google_analytics/trigger.png)  
+
+
+### 配置Tags
+按照下图配置一份Tags  
+
+![config_tag](./asset/google_analytics/config_tag.png)
+![config_tag_trigger](./asset/google_analytics/config_tag_trigger.png)
+
+
+### 再次发布
+完成后,再刷新我们的页面就可以看到效果。每一次路由变化就会有一个发送到`google-analytics`的请求。
+
 
 
 ## references
 [Tag management system](https://en.wikipedia.org/wiki/Tag_management_system)
+[History API](https://developer.mozilla.org/en-US/docs/Web/API/History_API)
