@@ -7,3 +7,4 @@
 * [gitlab runner使用](runner_in_docker.md)
 * [使用yarn](use_yarn.md)  
 * [gitlab docker runner的配置](runner_in_docker.md)  
+* [接入Google Tage Manager](google_analytics.md)  
