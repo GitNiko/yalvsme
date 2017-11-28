@@ -1,4 +1,4 @@
-Google Tage Manager
+Google Tag Manager
 =======================
 SPA(single page web application)在网站流量分析上远不如静态页面那么方便，静态页面可以直接在Html标签上加上统计的代码(百度统计，CNZZ，GA之类的)就可以统计到用户各个页面的访问量，停留时间等等。然而SPA通常使用的是HashRouter(/#/somerouter)的这种方式，这样统计代码就无法统计到页面其他的前端路由的访问了。
 
