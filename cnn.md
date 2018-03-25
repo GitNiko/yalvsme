@@ -13,3 +13,6 @@ A grayscale image, on the other hand, has just one channel
 
 ### Fully Connected Layer
 >The Fully Connected layer is a traditional Multi Layer Perceptron that uses a softmax activation function in the output layer
+
+### convolution integral
+翻转到底是什么意思？

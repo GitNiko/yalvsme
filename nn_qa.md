@@ -13,6 +13,11 @@
 
 ## 网络中所有的权重和阀值的矩阵是什么样的结构
 
+## CrossEntropy
+代价函数。弥补学习速率变慢(sigmoid作为激活函数的情况下)。
+
+## Softmax
+
 ## 为什么初始化权重的时候一般用正态分布的方式
 
 ## MSE为什么要除以2
@@ -20,3 +25,6 @@
 
 ## 参数
 https://www.quora.com/How-are-the-cost-functions-for-Neural-Networks-derived
+
+export DYLD_FALLBACK_LIBRARY_PATH=/usr/local/Cellar/opencv/3.3.0_3/lib:$DYLD_FALLBACK_LIBRARY_PATH
+export PYTHONPATH=/usr/local/Cellar/opencv/3.3.0_3/lib/python3.6/site-packages:$PYTHONPATH
