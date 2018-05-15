@@ -96,8 +96,28 @@ deploy_apk:
 ![Jobs](./asset/runner_in_docker/jobs.png)  
 里面有从头开始执行的记录，可以查看失败的原因  
 ![terminal](./asset/runner_in_docker/terminal.png)  
+
+## 关于缓存
+默认在`/srv/gitlab-runner/config/config.toml`中可以设置缓存映射目录，如果不设置缓存会放在`docker volume`中。
+```yaml
+[[runners]]
+  name = "web runner"
+  executor = "docker"
+  [runners.docker]
+    tls_verify = false
+    image = "alpine:latest"
+    privileged = false
+    disable_cache = false
+    volumes = ["/home/docker/gitlab_cache:/cache:rw"]
+    shm_size = 0
+  [runners.cache]
+
+```
+`volumes = ["/home/docker/gitlab_cache:/cache:rw"]` 第一个路径是host的路径(一般就是实际路径),第二个是映射的容器中的缓存路径
+
 ## 相关链接参考
 [pipelines and jobs](https://docs.gitlab.com/ee/ci/pipelines.html)  
 [git runner install](https://docs.gitlab.com/runner/install/index.html)  
 [install in docker](https://docs.gitlab.com/runner/install/docker.html)  
 [register runners](https://docs.gitlab.com/runner/register/index.html#docker)  
+[set volume](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#example-2-mount-a-host-directory-as-a-data-volume)
