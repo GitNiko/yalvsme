@@ -1,4 +1,4 @@
-使用lerna改造前端项目
+使用lerna改造Web前端项目
 ===========================
 在用到lerna前，大概解释下关于代码管理的两种模式，`monorepo`和`multirepo`。  
 
@@ -37,4 +37,50 @@
 但是我们希望能够保持组件库还能够单独发布出来，供有其他独立项目通过包依赖的方式使用，这个时候就需要lerna这个工具来帮助我们简化这件事.
 
 ## lerna
-`A tool for managing JavaScript projects with multiple packages.` 
+`A tool for managing JavaScript projects with multiple packages.`   
+
+
+### 初始化lerna项目
+`lerna bootstrap`
+todo
+
+### 项目结构
+```js
+- packages
+  - core // 应用入口
+    - node_modules
+    - src
+    - package.json
+    - yarn.lock
+  - components // 组件库
+    - node_modules
+    - src
+    - package.json
+    - yarn.lock
+  - common // 工具库
+    - node_modules
+    - src
+    - package.json
+    - yarn.lock
+  - moduleA // 业务模块
+    - node_modules
+    - src
+    - package.json
+    - yarn.lock
+- .eslintrc.js
+- .prettierrc
+- lerna.json
+- package.json
+- yarn.lock
+```
+
+入口中一般放一些登录的逻辑，业务逻辑都放在其他依赖中(moduleA,moduleB...)。
+lerna会为每个package生成package.json以及独立下载node_modules。
+如果是依赖现有的模块（例如core依赖components),那么在core的node_modules中会有一个link到components的路径中。
+
+每个package可以独立发布出去，不过一般来说只会把components和common发布。
+
+现在每个package中开发都会使用同一套workflow, lint, babel, prettierrc, 这些都只需要配置一次。对于小规模的团队来说可以减少很多重复的工程模版，同时也能满足后期可以把共用模块独立发布出去。
+
+### trouble
+目前发现 如果packageA 和 packageB同时依赖相同的库的时候，同样的库代码会被同时编译两次。可能是webpack的问题，有待解决。
