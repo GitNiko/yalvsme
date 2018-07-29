@@ -4,31 +4,49 @@
 分解成为为两个问题：
 - 路径最优
 - 配送组合最优
+- 起点
+
+## 目标
+- 配送成本最低
+
+## 去特殊化
+
 
 ## keyword
 - Dynamic Vehicle Routing Problem
 - 节约里程法 
+- 禁忌搜索法(TS)
+- 遗传演算法(GA)
+- 模拟退火法(SA)
+- 粒子群算法
+- Self-Organizing Maps
+- 精度:TS > GA > SA, 计算时间: TS 是 GA的2～3倍， SA的20倍.
 - VRP
 - s
+
 
 ## 实验策略
 短时间内可以通过遍历的方式找出最优的结果的数据集，通过该数据集来验证算法偏差率。
 
-## P(Deterministic Polynomial Time)
+## 算法
+### 禁忌搜索法(TS)
+
+## 概念补充
+### P(Deterministic Polynomial Time)
 >Deterministic Polynomial Time可以解決的decision problem  
 
 如果一个问题可以找到一个能在多项式的时间里解决它的算法，那么这个问题就属于P问题
 
-## NP
+### NP
 > Nondeterministic Polynomial Time可以解決的decision problem 
 
 找一个解很困难，但验证一个解很容易。  
 可以在多项式的时间里验证一个解的问题
 
-## P与NP
+### P与NP
 P是NP的子集
 
-## NPC
+### NPC
 > Nondeterministic Polynomial Complete  
 > definition:
 > A descision problem c is NP-complete if:
@@ -37,11 +55,11 @@ P是NP的子集
 
 证明方式:先证明它至少是一个NP问题，再证明其中一个已知的NPC问题能约化到它（由约化的传递性，则NPC问题定义的第二条也得以满足；
 
-## SAT(Boolean Satisfiability Problem)
+### SAT(Boolean Satisfiability Problem)
 第一個 NP-Complete problem
 
 
-## NP-hardness
+### NP-hardness
 h is NP-hardness if every problem in NP is reducible to h in polynomial time
 
 ## 资料
