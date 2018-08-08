@@ -55,10 +55,13 @@ $$
 
 
 ## 资料
+[多边形面积公式推导](https://wenku.baidu.com/view/c6eb44c58bd63186bcebbc2a.html)
 [albers equal-area conic projection](http://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html)
 [albers project in js](https://gist.github.com/RandomEtc/476238)
 [mercator vs albers](https://gis.stackexchange.com/questions/49210/area-calculation-albers-equal-area-vs-pseudo-mercator)
 [球面三角](https://www.guokr.com/article/98934/)
+[球面多边形面积公式](http://mathworld.wolfram.com/SphericalPolygon.html)
 [正弦投影实现](https://www.periscopedata.com/blog/polygon-area-from-latitude-and-longitude-using-sql)
 [正弦投影证明](http://www.progonos.com/furuti/MapProj/Normal/CartHow/HowSanson/howSanson.html)
 [map projection](https://arxiv.org/pdf/1412.7690.pdf)
+[mapprojection内容更多](http://www.auburn.edu/academic/classes/fory/7470/lab08/understanding%20map%20projections.pdf)
