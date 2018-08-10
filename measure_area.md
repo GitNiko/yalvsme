@@ -9,7 +9,6 @@
 - equator(赤道), merdian(经线)
 - Tissot’s indicatrix
 - Mercator projection
-- Albers projection
 - Sinusoidal projection
 
 ## 方法
@@ -24,10 +23,11 @@
 - Conventional projections(以上两种都有)
 
 ## Mercator projection
-> 通过圆心投影到圆柱上后，平铺圆柱，形成平面坐标。特点是:非等面积，不是适合用于面积计算    
+> 通过圆心投影到圆柱上后，平铺圆柱，形成平面坐标。特点是:非等面积，不是适合用于面积计算, 常用语地图导航上面    
 
-以下假设$\phi$和$\lambda$都是弧度单位,$\lambda = 0$的时候处在格林威治子午线, $\phi = 0$处在赤道 
+![mercator_projection](./asset/measure_area/mercator_projection.jpg)  
 
+以下假设$\phi$和$\lambda$都是弧度单位,$\lambda = 0$的时候处在格林威治子午线, $\phi = 0$处在赤道  
 在equator(赤道)处水平比例应该是 $s = w/(2\pi R)$  
 在latitidue(纬度)为 $\phi$ 的位置时，水平比例: 
 
@@ -72,15 +72,26 @@ $$
 y = f ( \phi ) = \frac { w } { 2 \pi } \ln | \sec \phi + \tan \phi |
 $$
 
+可以看出上下两集的面积都是拉大的，但是形状是不变的  
+![mercator_tissot_indicatrices](./asset/measure_area/mercator_tissot_indicatrices.jpg)  
 
-## Albers projection
 
-### 特点
-- 经纬线相互垂直
-- 经线是直线
-- 纬线是同心圆弧
-- 等距，保形，等面积
-- 极点表示为弧或点
+## Lambert projection
+如果要保持面积不变那么需要$s_{v} * s_{h} = c$ 也就是保证相乘等与一个常数， 那么: 
+
+$$
+f ^ { \prime } ( \phi ) \sec \phi = c
+$$
+
+然后解出来:  
+
+$$
+y = \frac { w } { 2 \pi } \sin \phi
+$$
+
+可以看出来变形了:  
+![lambert_tissot_indicatrices](./asset/measure_area/lambert_tissot_indicatrices.jpg)
+
 
 ## Sinusoidal projection
 
