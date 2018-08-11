@@ -23,7 +23,7 @@
 - Conventional projections(以上两种都有)
 
 ## Mercator projection
-> 通过圆心投影到圆柱上后，平铺圆柱，形成平面坐标。特点是:非等面积，不是适合用于面积计算, 常用语地图导航上面    
+> 通过圆心投影到圆柱上后，平铺圆柱，形成平面坐标。特点是:非等面积，不是适合用于面积计算, 常用于地图导航上面    
 
 ![mercator_projection](./asset/measure_area/mercator_projection.jpg)  
 
@@ -94,17 +94,18 @@ $$
 
 
 ## Sinusoidal projection
+考虑球面一点$P$, 它距离赤道的表面距离是$m = \phi R$(弧度乘以半径=对应的弧长),以此距离作为地图的纵坐标。
 
-### 公式
+$P$点到中心子午线的的"距离"作为很横坐标, 显然这段距离为$p = R\lambda\cos\phi$  
+因此可以得出公式:  
+
 $$
-x = s R \Delta \lambda \cos \phi
+x = R \lambda \cos \phi 
 $$
 $$
-y = s R \phi
+y = R \phi
 $$
-<!-- 
-## 球面三角学
-### 球面角 -->
+
 
 ## 多边形面积
 ### 公式
@@ -118,8 +119,127 @@ $$
 ## 流程
 获取经纬度，通过`Albers projection`转换成平面坐标，计算面积
 
-## 误差
-实际上多边形边并不是直线，而是曲线
+
+## 算法实现及测试数据
+```swift
+func * (lhs:(Double, Double), rhs:(Double, Double)) -> Double {
+    return lhs.0 * rhs.1 - rhs.0 * lhs.1
+}
+
+func toRadians(degree: Double) -> Double {
+    return degree * Double.pi / 180
+}
+
+let radius = 6371000.0
+let lambda0 = toRadians(degree: 0.0)
+let phi0 = toRadians(degree: 0.0)
+let phi1 = toRadians(degree: 0.0)
+let phi2 = toRadians(degree: 60.0)
+
+// Lambert projection
+func lambert2car(latitude:Double, longtitude:Double) -> (Double, Double) {
+    return (radius * longtitude, radius * sin(latitude))
+}
+
+
+// Sinusoidal projection
+func sin2car(latitude:Double, longtitude:Double) -> (x:Double, y:Double) {
+    return (longtitude * radius * cos(latitude), latitude * radius)
+}
+
+
+func areaOfPolygon(vertics:[(Double, Double)]) -> Double {
+    var polygonVertics = [(Double, Double)]()
+    polygonVertics.append(contentsOf: vertics)
+    polygonVertics.append(vertics.first!)
+    let sum = polygonVertics.reduce((pre:(0.0, 0.0), sum: 0.0)) { (acc, x:(Double, Double)) -> ((Double, Double), Double) in
+        return (pre: x, sum: acc.1 + acc.0 * x)
+    }
+    
+    return sum.1 * 0.5
+}
+
+func runTest(data: [(testData: [(x:Double, y:Double)], validation: Double)], projections: [(Double, Double) -> (Double, Double)]) -> Void {
+    for projection in projections {
+        print("0000000000000000")
+        for unit in data {
+            let result = areaOfPolygon(vertics: unit.testData.map({ (vector) -> (Double, Double) in
+                return (toRadians(degree: vector.0), toRadians(degree: vector.1))
+            }).map({ (latitude, longtitude) -> (Double, Double) in
+                return projection(latitude, longtitude)
+            })
+            )
+            print("========")
+            print("result(m^2):", result)
+            print("validation(m^2):", unit.validation)
+            print("error(m^2):", result - unit.validation)
+            print("error rate(%):", (result - unit.validation)/unit.validation * 100)
+        }
+    }
+}
+
+runTest(data: [
+        (// 紫金山
+            [
+                (32.09237231228167,118.85816641151905),
+                (32.08888191941637,118.85756559669971),
+                (32.091936020465305,118.85310240089893),
+                (32.08902735511446,118.84426183998585),
+                (32.085754995919906,118.8418585807085),
+                (32.08408241152431,118.83396215736866),
+                (32.08146439188813,118.83224554359913),
+                (32.07840994086831,118.8323313742876),
+                (32.07528265908702,118.83138723671436),
+                (32.06590017191265,118.82040090858936),
+                (32.06581208291123,118.81746443495001),
+                (32.064866506642154,118.81694945081915),
+                (32.060065737860235,118.82029684766974),
+                (32.053446082872,118.81995352491583),
+                (32.050899934194696,118.82845076307501),
+                (32.044497875968844,118.83102568372931),
+                (32.038968465311164,118.8288799165174),
+                (32.04180596776272,118.83849295362677),
+                (32.03984155235566,118.8482776521131),
+                (32.04020533616681,118.85145338758673),
+                (32.036058115030464,118.85677489027228),
+                (32.036785711273424,118.85909231886114),
+                (32.04035084928652,118.85694655164923),
+                (32.03955052426596,118.86441382154669),
+                (32.04209698868248,118.87248190626349),
+                (32.046171184413666,118.87711676344122),
+                (32.04937221098288,118.8838115571424),
+                (32.05366432089069,118.88664396986212),
+                (32.058901877180745,118.88793143018927),
+                (32.06362996907811,118.88715895399298),
+                (32.065084717418095,118.88990553602423),
+                (32.06966702344827,118.88896139845099),
+                (32.07461274689404,118.88501318678107),
+                (32.08261261546742,118.879777514784),
+                (32.09250239412376,118.87497099622931),
+                (32.088139388420466,118.87050780042853),
+                (32.091993387526806,118.8641563294812)
+            ],
+            29008610.93),
+        (// 凹多边形
+            [
+                (33.970116789904445,118.29517536591902),
+                (33.96335424162145,118.29732113313094),
+                (33.96641525113789,118.3102815670909),
+                (33.97275068954864,118.3053035515296)
+            ], 878292.97),
+        (
+            [
+                (32.08810117348784,118.76541372224733),
+                (32.05988202935582,118.766615351886),
+                (32.06337352956128,118.8047241775696),
+                (32.08897379166003,118.80300756380007),
+                (32.0741381495211,118.79236455842897),
+                (32.07253808349195,118.7786316482727)
+            ], 6594696.67)
+    ],
+        projections: [sin2car(latitude:longtitude:), lambert2car(latitude:longtitude:)])
+
+```
 
 
 
