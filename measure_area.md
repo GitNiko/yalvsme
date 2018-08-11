@@ -47,7 +47,8 @@ $$
 y = f ( \phi )
 $$
 
-特别的，当周长等于地图的宽度时($2\pi R = w$), $y = R\tan \phi$
+特别的，当周长等于地图的宽度时($2\pi R = w$), $y = R\tan \phi$  
+
 在球面上$\phi$和$\phi_{1}$所对应的弧长差为:  
 
 $$
@@ -94,7 +95,12 @@ $$
 
 
 ## Sinusoidal projection
+![sinusoidal_projection_map.png](./asset/measure_area/sinusoidal_map.png)
+
+
 考虑球面一点$P$, 它距离赤道的表面距离是$m = \phi R$(弧度乘以半径=对应的弧长),以此距离作为地图的纵坐标。
+
+![sinusoidal_projection.png](./asset/measure_area/sinusoidal_projection.png)
 
 $P$点到中心子午线的的"距离"作为很横坐标, 显然这段距离为$p = R\lambda\cos\phi$  
 因此可以得出公式:  
