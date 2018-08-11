@@ -27,7 +27,7 @@
 
 ![mercator_projection](./asset/measure_area/mercator_projection.jpg)  
 
-以下假设$\phi$和$\lambda$都是弧度单位,$\lambda = 0$的时候处在格林威治子午线, $\phi = 0$处在赤道  
+以下假设$\phi$和$\lambda$都是弧度单位,$\lambda = 0$的时候处在格林威治子午线, $\phi = 0$处在赤道  
 在equator(赤道)处水平比例应该是 $s = w/(2\pi R)$  
 在latitidue(纬度)为 $\phi$ 的位置时，水平比例: 
 
@@ -41,15 +41,15 @@ $$
 x = \frac { w \lambda } { 2 \pi }
 $$
 
-y轴: 
+y轴: 
 
 $$
 y = f ( \phi )
 $$
 
-特别的，当周长等于地图的宽度时($2\pi R = w$), $y = R\tan \phi$  
+特别的，当周长等于地图的宽度时($2\pi R = w$), $y = R\tan \phi$  
 
-在球面上$\phi$和$\phi_{1}$所对应的弧长差为:  
+在球面上$\phi$和$\phi_{1}$所对应的弧长差为:  
 
 $$
 R \left( \phi _ { 1 } - \phi \right)
@@ -67,18 +67,18 @@ $$
 f ^ { \prime } ( \phi ) = \frac { w } { 2 \pi } \sec \phi
 $$
 
-根据积分表解出来:  
+根据积分表解出来:  
 
 $$
 y = f ( \phi ) = \frac { w } { 2 \pi } \ln | \sec \phi + \tan \phi |
 $$
-
-可以看出上下两集的面积都是拉大的，但是形状是不变的  
+
+可以看出上下两集的面积都是拉大的，但是形状是不变的  
 ![mercator_tissot_indicatrices](./asset/measure_area/mercator_tissot_indicatrices.jpg)  
 
 
 ## Lambert projection
-如果要保持面积不变那么需要$s_{v} * s_{h} = c$ 也就是保证相乘等与一个常数， 那么: 
+如果要保持面积不变那么需要$s_{v} * s_{h} = c$ 也就是保证相乘等与一个常数， 那么: 
 
 $$
 f ^ { \prime } ( \phi ) \sec \phi = c
@@ -98,11 +98,11 @@ $$
 ![sinusoidal_projection_map.png](./asset/measure_area/sinusoidal_map.png)
 
 
-考虑球面一点$P$, 它距离赤道的表面距离是$m = \phi R$(弧度乘以半径=对应的弧长),以此距离作为地图的纵坐标。
+考虑球面一点$P$, 它距离赤道的表面距离是$m = \phi R$(弧度乘以半径=对应的弧长),以此距离作为地图的纵坐标。
 
 ![sinusoidal_projection.png](./asset/measure_area/sinusoidal_projection.png)
 
-$P$点到中心子午线的的"距离"作为很横坐标, 显然这段距离为$p = R\lambda\cos\phi$  
+$P$点到中心子午线的的"距离"作为很横坐标, 显然这段距离为$p = R\lambda\cos\phi$  
 因此可以得出公式:  
 
 $$
@@ -113,7 +113,7 @@ y = R \phi
 $$
 
 
-## 多边形面积
+## 多边形面积
 ### 公式
 $$
 S  = \frac { 1 } { 2 } \sum _ { k = 1 } ^ { m } \left( x _ { k } y _ { k + 1 } - x _ { k + 1 } y _ { k } \right)
