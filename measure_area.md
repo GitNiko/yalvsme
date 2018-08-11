@@ -1,6 +1,7 @@
 测亩仪
 ==============================
 通过在地图上标记点，围成多边形后，给出该多边形区域的实际地里面积。
+![screentshot](./asset/measure_area/screen_shot.png) 
 
 ## keyword
 - 多边形面积计算
