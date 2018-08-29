@@ -33,7 +33,7 @@
 
 ![mercator_projection](./asset/measure_area/mercator_projection.jpg)  
 
-以下假设$\phi$和$\lambda$都是弧度单位,$\lambda = 0$的时候处在格林威治子午线, $\phi = 0$处在赤道  
+以下假设 $\phi$ 和 $\lambda$ 都是弧度单位,$\lambda = 0$的时候处在格林威治子午线, $\phi = 0$处在赤道  
 在equator(赤道)处水平比例应该是 $s = w/(2\pi R)$  
 在latitidue(纬度)为 $\phi$ 的位置时，水平比例: 
 
