@@ -149,7 +149,7 @@ func lambert2car(latitude:Double, longtitude:Double) -> (Double, Double) {
 
 
 // Sinusoidal projection
-func sin2car(latitude:Double, longtitude:Double) -> (x:Double, y:Double) {
+func sin2car(latitude:Double, longtitude:Double) -> (Double, Double) {
     return (longtitude * radius * cos(latitude), latitude * radius)
 }
 
@@ -167,7 +167,6 @@ func areaOfPolygon(vertics:[(Double, Double)]) -> Double {
 
 func runTest(data: [(testData: [(x:Double, y:Double)], validation: Double)], projections: [(Double, Double) -> (Double, Double)]) -> Void {
     for projection in projections {
-        print("0000000000000000")
         for unit in data {
             let result = areaOfPolygon(vertics: unit.testData.map({ (vector) -> (Double, Double) in
                 return (toRadians(degree: vector.0), toRadians(degree: vector.1))
