@@ -11,9 +11,3 @@
 * [Html页面元素监控](element_trigger.md)  
 * [测量地图面积](measure_area.md)
 
-
-
-## 即将到来的章节
-- redux中实现业务的步骤
-- redux-observable在实际生产使用中的总结
-- 组件的设计
