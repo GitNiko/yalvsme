@@ -5,11 +5,9 @@
 本文主要针对常用的三个开源npm管理工具作对比。  
 
 ## Package Registry specification 
-> HTTP GET is the only method required for consuming the data in a package registry. Registries MAY use other methods for entering data into the registry, authenticating user accounts, and so on, but that is outside the scope of this specification.  
-
-> Clients SHOULD send an Accept header of application/json. Behavior of the registry in the presence of other Accept headers is undefined. For instance, a Compliant registry MAY send an HTML document description of a package if given the Accept value of text/html, or it MAY send JSON in all cases.  
-
-> Registries MUST send responses with an application/json Content-Type if the client sends an Accept header value of application/json.
+> HTTP GET is the only method required for consuming the data in a package registry. Registries MAY use other methods for entering data into the registry, authenticating user accounts, and so on, but that is outside the scope of this specification.    
+Clients SHOULD send an Accept header of application/json. Behavior of the registry in the presence of other Accept headers is undefined. For instance, a Compliant registry MAY send an HTML document description of a package if given the Accept value of text/html, or it MAY send JSON in all cases.    
+ Registries MUST send responses with an application/json Content-Type if the client sends an Accept header value of application/json.
 
 总结下`Registry`主要包含以下规定:  
 - 全部是 `GET` 请求
@@ -275,6 +273,14 @@ npm上`{registry root url}/{package name}/{package version}`的`response body`�
 `@somescope/somepackagename` URL-safe characters, no leading dots or underscores  
 可以单独给某个scope设定单独的registry
 
+## npmrc
+```js
+//http://101.132.155.81:4873/:_password=123456
+//http://101.132.155.81:4873/:username=niko
+//http://101.132.155.81:4873/:email=galaxix@gmail.com
+//http://101.132.155.81:4873/:always-auth=false
+```
+
 
 ## 都具备的特点  
 
@@ -288,11 +294,30 @@ npm上`{registry root url}/{package name}/{package version}`的`response body`�
 - own tiny database
 - supports various community-made plugins to hook into services such as Amazon's s3 and Google Cloud Storage
 
+### storage
+`/storage`用户存放包信息，包缓存。例如：如果我上传了`@test/hello`包，会在该目录下生成对应路径的`/storage/@test/hello`，
+而该目录下存放了压缩的`tgz`的文件，以及对应的`package.json`。其中`package.json`比项目中的`package.json`多了对应版本的信息，
+实际上该文件内容就是访问`{registry root url}/{package name}`的内容。
+
+并且如果通过`{registry root url}/{package name}`访问不存在的包会去搜索上游的`npm`服务器获取`package.json`并且存到`/storage`目录中。  
+例如：访问了hello包（不是`@test/hello`)，如果上游存在改包，则会在`storage/`中生成对应的目录，并且存放对应的`package.json`。
+
+以下是对应的目录
+```js
+.sinopia-db.json
+@test
+hello
+```
+
 ### 工程架构
 - express
 ```js
 
 ```
+
+## npm publish
+
+## npm install
 
 ## 讨论
 
@@ -300,7 +325,7 @@ npm上`{registry root url}/{package name}/{package version}`的`response body`�
 例如发现了一个bug，提给了`maintainer`，但是他可能由于种种原因（不维护，不同意等等），这个时候需要覆盖一些公共的包。  
 这么作不好的地方主要还是容易脱离社区，需要谨慎对待。
 
-## #lock文件索引问题  
+## lock文件索引问题  
 如果在内网安装，lock的链接全是私有npm的地址。如果在外网的时候再install就会下载不了包。  
 
 
@@ -311,6 +336,9 @@ npm上`{registry root url}/{package name}/{package version}`的`response body`�
 
 ### 数据迁移
 
+## 证书问题
+>Default: The npm CA certificate  
+The Certificate Authority signing certificate that is trusted for SSL connections to the registry. Values should be in PEM format (Windows calls it "Base-64 encoded X.509 (.CER)") 
 
 ## 拓展
 - 依赖树的dedupe算法  
@@ -321,3 +349,69 @@ npm上`{registry root url}/{package name}/{package version}`的`response body`�
 [left-pad的故事](https://www.theregister.co.uk/2016/03/23/npm_left_pad_chaos/)  
 [Packages/Registry specification](http://wiki.commonjs.org/wiki/Packages/Registry)  
 [npm install的原理的简单介绍](http://www.ruanyifeng.com/blog/2016/01/npm-install.html)  
+[npm publish](https://docs.npmjs.com/cli/publish)  
+[npm ca](https://docs.npmjs.com/misc/config)  
+
+
+## log
+```shell
+root@ceduvpn:/etc/ssl# vim 
+certs/       openssl.cnf  private/     
+root@ceduvpn:/etc/ssl# vim 
+certs/       openssl.cnf  private/     
+root@ceduvpn:/etc/ssl# vim openssl.cnf 
+root@ceduvpn:/etc/ssl# cd /home/docker/
+dlt-scraping/ mongo/        mysql/        .ssh/         verdaccio/    vpn/          
+root@ceduvpn:/etc/ssl# cd /home/docker/
+root@ceduvpn:/home/docker# ls
+dlt-scraping  mongo  mysql  verdaccio  vpn
+root@ceduvpn:/home/docker# su docker
+docker@ceduvpn:~$ mkdir ca
+docker@ceduvpn:~$ ls
+ca  dlt-scraping  mongo  mysql  verdaccio  vpn
+docker@ceduvpn:~$ cd ca/
+docker@ceduvpn:~/ca$ ls
+docker@ceduvpn:~/ca$ openssl genrsa -aes256 -out private/ca.pem 1024
+private/ca.pem: No such file or directory
+140088518948504:error:02001002:system library:fopen:No such file or directory:bss_file.c:398:fopen('private/ca.pem','w')
+140088518948504:error:20074002:BIO routines:FILE_CTRL:system lib:bss_file.c:400:
+docker@ceduvpn:~/ca$ mkdir private
+docker@ceduvpn:~/ca$ ls
+private
+docker@ceduvpn:~/ca$ openssl genrsa -aes256 -out private/ca.pem 1024
+Generating RSA private key, 1024 bit long modulus
+.++++++
+............++++++
+e is 65537 (0x10001)
+Enter pass phrase for private/ca.pem:
+139794937226904:error:28069065:lib(40):UI_set_result:result too small:ui_lib.c:823:You must type in 4 to 1023 characters
+Enter pass phrase for private/ca.pem:
+139794937226904:error:28069065:lib(40):UI_set_result:result too small:ui_lib.c:823:You must type in 4 to 1023 characters
+Enter pass phrase for private/ca.pem:
+Verifying - Enter pass phrase for private/ca.pem:
+docker@ceduvpn:~/ca$ openssl rsa -in private/ca.pem -out private/ca.key
+Enter pass phrase for private/ca.pem:
+writing RSA key
+docker@ceduvpn:~/ca$ openssl req -new -key private/ca.pem -out private/ca.csr
+Enter pass phrase for private/ca.pem:
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:CN
+State or Province Name (full name) [Some-State]:JS
+Locality Name (eg, city) []:nanjing
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:shein
+Organizational Unit Name (eg, section) []:web
+Common Name (e.g. server FQDN or YOUR name) []:npmca
+Email Address []:galxis.ling@gmail.com 
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:123456
+An optional company name []:shein 
+docker@ceduvpn:~/ca$ ls
+```
