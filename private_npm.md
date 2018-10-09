@@ -274,6 +274,12 @@ npm上`{registry root url}/{package name}/{package version}`的`response body`�
 可以单独给某个scope设定单独的registry
 
 ## npmrc
+npm的配置文件。会有以下四个可能存在的地方:  
+- 每个项目都可以有一个配置文件(/path/to/my/project/.npmrc)  
+- 每个用户下都可以有一个配置文件(~/.npmrc)  
+- 全局配置($PREFIX/etc/npmrc)  
+- 内置配置(/path/to/npm/npmrc)  
+
 ```js
 //http://101.132.155.81:4873/:_password=123456
 //http://101.132.155.81:4873/:username=niko
@@ -303,10 +309,15 @@ npm上`{registry root url}/{package name}/{package version}`的`response body`�
 例如：访问了hello包（不是`@test/hello`)，如果上游存在改包，则会在`storage/`中生成对应的目录，并且存放对应的`package.json`。
 
 以下是对应的目录
-```js
-.sinopia-db.json
-@test
-hello
+```shell
+|-- hello
+|   `-- package.json
+|-- .sinopia-db.json
+`-- @test
+    `-- hello
+        |-- hello-1.0.0.tgz
+        |-- hello-1.0.2.tgz
+        `-- package.json
 ```
 
 ### 工程架构
