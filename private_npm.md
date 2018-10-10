@@ -280,12 +280,43 @@ npm的配置文件。会有以下四个可能存在的地方:
 - 全局配置($PREFIX/etc/npmrc)  
 - 内置配置(/path/to/npm/npmrc)  
 
+其中内容如下：
+
 ```js
 //http://101.132.155.81:4873/:_password=123456
 //http://101.132.155.81:4873/:username=niko
 //http://101.132.155.81:4873/:email=galaxix@gmail.com
 //http://101.132.155.81:4873/:always-auth=false
 ```
+
+`nom config`使用到的配置都可以在这里设置。  有哪些配置可以查看[官方说明](https://docs.npmjs.com/misc/config)。
+
+
+
+## 私有库发布/使用的方式
+
+由于私库的发布/使用与是否使用私有库/共有库无关，只是一个标准的客户端(npm-cli)的行为，所以这里放在前面说明。
+
+项目中使用配置私库一般有以下两种方式：
+
+- `alias mynpm='npm --registry=http://registry.npm.example.com` 
+- 单独给项目配置`npmrc`文件，然后在文件里设置`registry=http://registry.npm.example.com` 
+
+这里建议用第二种，因为发布的时候还需要用到`npmrc`。
+
+### 使用
+
+- 进入到项目根目录下
+- `echo "registry=http://registry.npm.example.com" >> .npmrc`
+
+这时候就可以正常时用npm了，在安装依赖的时候都会去链接私库`http://registry.npm.example.com`
+
+### 发布
+
+- 在项目根目录下`npm login`成功，然后在`~/.npmrc`文件中拿到token，类似如下`//http://registry.npm.example.com/:_authToken="/8Ep1MXmpkSwuzcTVSZy2Q=="`
+- 拿到的token配置加到项目目录下的`.npmrc`中
+- 最后发布`npm publish`即可
+
 
 
 ## 都具备的特点  
@@ -326,10 +357,6 @@ npm的配置文件。会有以下四个可能存在的地方:
 
 ```
 
-## npm publish
-
-## npm install
-
 ## 讨论
 
 ### Override public packages
@@ -362,6 +389,8 @@ The Certificate Authority signing certificate that is trusted for SSL connection
 [npm install的原理的简单介绍](http://www.ruanyifeng.com/blog/2016/01/npm-install.html)  
 [npm publish](https://docs.npmjs.com/cli/publish)  
 [npm ca](https://docs.npmjs.com/misc/config)  
+
+[npmrc](https://docs.npmjs.com/files/npmrc)  
 
 
 ## log
