@@ -332,12 +332,10 @@ npm的配置文件。会有以下四个可能存在的地方:
 - supports various community-made plugins to hook into services such as Amazon's s3 and Google Cloud Storage
 
 ### storage
-`/storage`用户存放包信息，包缓存。例如：如果我上传了`@test/hello`包，会在该目录下生成对应路径的`/storage/@test/hello`，
-而该目录下存放了压缩的`tgz`的文件，以及对应的`package.json`。其中`package.json`比项目中的`package.json`多了对应版本的信息，
-实际上该文件内容就是访问`{registry root url}/{package name}`的内容。
+`/storage`用户存放包信息，包缓存。例如：如果我上传了`@test/hello`包，会在该目录下生成对应路径的`/storage/@test/hello`，而该目录下存放了压缩的`tgz`的文件，以及对应的`package.json`。其中`package.json`比项目中的`package.json`多了对应版本的信息，实际上该文件内容就是访问`{registry root url}/{package name}`的内容。
 
 并且如果通过`{registry root url}/{package name}`访问不存在的包会去搜索上游的`npm`服务器获取`package.json`并且存到`/storage`目录中。  
-例如：访问了hello包（不是`@test/hello`)，如果上游存在改包，则会在`storage/`中生成对应的目录，并且存放对应的`package.json`。
+例如：访问了hello包（不是`@test/hello`)，如果上游存在该包，则会在`storage/`中生成对应的目录，并且存放对应的`package.json`。不过并不会下载压缩包`.tgz`。只会在`npm install`的时候服务器上才会缓存对应的上游的压缩包。
 
 以下是对应的目录
 ```shell
@@ -351,10 +349,18 @@ npm的配置文件。会有以下四个可能存在的地方:
         `-- package.json
 ```
 
-### 工程架构
-- express
-```js
+### 插件
 
+
+
+### 工程架构
+
+## cnpm
+
+```shell
+alias cnpm="npm --registry=http://registry.cnpmjs.org \
+--cache=${HOME}/.npm/.cache/cnpm \
+--userconfig=${HOME}/.cnpmrc"
 ```
 
 ## 讨论
@@ -388,7 +394,7 @@ The Certificate Authority signing certificate that is trusted for SSL connection
 [Packages/Registry specification](http://wiki.commonjs.org/wiki/Packages/Registry)  
 [npm install的原理的简单介绍](http://www.ruanyifeng.com/blog/2016/01/npm-install.html)  
 [npm publish](https://docs.npmjs.com/cli/publish)  
-[npm ca](https://docs.npmjs.com/misc/config)  
+[npm ca](https://docs.npmjs.com/misc/config)   
 
 [npmrc](https://docs.npmjs.com/files/npmrc)  
 
