@@ -47,7 +47,7 @@ todo
 ### 项目结构
 ```js
 - packages
-  - core // 应用入口
+  - core // 应用入口
     - node_modules
     - src
     - package.json
@@ -82,5 +82,90 @@ lerna会为每个package生成package.json以及独立下载node_modules。
 
 现在每个package中开发都会使用同一套workflow, lint, babel, prettierrc, 这些都只需要配置一次。对于小规模的团队来说可以减少很多重复的工程模版，同时也能满足后期可以把共用模块独立发布出去。
 
+
+
+## 技巧
+
+### 统一修改版本
+
+`learn version`在`fixed` 模式下可以统一修改包的版本：
+
+```shell
+➜  react-helper git:(master) lerna version
+lerna notice cli v3.4.3
+lerna info current version 0.0.0
+lerna info Looking for changed packages since initial commit.
+? Select a new version (currently 0.0.0) Custom Version
+? Enter a custom version 6.0.0
+
+Changes:
+ - @test/react-redux-component-loader: 5.0.0-alpha1 => 6.0.0
+ - @test/rrc-loader-helper: 2.1.3 => 6.0.0
+
+? Are you sure you want to create these versions? Yes
+lerna info lifecycle @test/rrc-loader-helper@2.1.3~preversion: @test/rrc-loader-helper@2.1.3
+
+> @test/rrc-loader-helper@2.1.3 preversion /Users/niko/workspace/shein/react-helper/packages/rrc-loader-helper
+> npm test && npm run build
+
+
+> @test/rrc-loader-helper@2.1.3 test /Users/niko/workspace/shein/react-helper/packages/rrc-loader-helper
+> ava
+
+
+  6 passed
+
+> @test/rrc-loader-helper@2.1.3 build /Users/niko/workspace/shein/react-helper/packages/rrc-loader-helper
+> babel src --out-dir lib
+
+Successfully compiled 20 files with Babel.
+lerna info git Pushing tags...
+lerna success version finished
+```
+
+从上面可以看到，把`react-redux-component-loader`和`rrc-loader-helpe`从原来的版本更新到了`6.0.0`，lerna会自动帮你把对应的`package.json`中的`version`改成相应的版本号。并且会触发各自包内定义的`preversion`脚本（如果定义的话）
+
 ### trouble
 目前发现 如果packageA 和 packageB同时依赖相同的库的时候，同样的库代码会被同时编译两次。可能是webpack的问题，有待解决。
+
+
+
+#### peerDepenceies
+
+peerDepenceies 不会自动update
+
+peerDep 应该尽可能宽松，不应该被自动update，
+
+https://github.com/lerna/lerna/issues/1018
+
+https://github.com/babel/babel/pull/6644
+
+
+
+#### 版本升级
+
+```js
+monorepo
+  -packages
+	- a
+	- b
+```
+
+a依赖b
+
+fixed 模式下，lerna version/publish 的时候，如果：
+
+- a更新了，则只是a版本升级
+- b更新了，则a和b都会升级
+- a,b都更新了，则a和b都会
+
+
+
+#### CI/CD
+
+版本号的升级，必须人工介入，无法自动判断到底是Patch还是Minor还是Major。
+
+## refs
+
+[preversion](https://docs.npmjs.com/cli/version)
+
