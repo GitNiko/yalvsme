@@ -357,7 +357,7 @@ npm的配置文件。会有以下四个可能存在的地方:
 
 ## cnpm
 
-```shell
+```
 alias cnpm="npm --registry=http://registry.cnpmjs.org \
 --cache=${HOME}/.npm/.cache/cnpm \
 --userconfig=${HOME}/.cnpmrc"
@@ -398,66 +398,3 @@ The Certificate Authority signing certificate that is trusted for SSL connection
 
 [npmrc](https://docs.npmjs.com/files/npmrc)  
 
-
-## log
-```shell
-root@ceduvpn:/etc/ssl# vim 
-certs/       openssl.cnf  private/     
-root@ceduvpn:/etc/ssl# vim 
-certs/       openssl.cnf  private/     
-root@ceduvpn:/etc/ssl# vim openssl.cnf 
-root@ceduvpn:/etc/ssl# cd /home/docker/
-dlt-scraping/ mongo/        mysql/        .ssh/         verdaccio/    vpn/          
-root@ceduvpn:/etc/ssl# cd /home/docker/
-root@ceduvpn:/home/docker# ls
-dlt-scraping  mongo  mysql  verdaccio  vpn
-root@ceduvpn:/home/docker# su docker
-docker@ceduvpn:~$ mkdir ca
-docker@ceduvpn:~$ ls
-ca  dlt-scraping  mongo  mysql  verdaccio  vpn
-docker@ceduvpn:~$ cd ca/
-docker@ceduvpn:~/ca$ ls
-docker@ceduvpn:~/ca$ openssl genrsa -aes256 -out private/ca.pem 1024
-private/ca.pem: No such file or directory
-140088518948504:error:02001002:system library:fopen:No such file or directory:bss_file.c:398:fopen('private/ca.pem','w')
-140088518948504:error:20074002:BIO routines:FILE_CTRL:system lib:bss_file.c:400:
-docker@ceduvpn:~/ca$ mkdir private
-docker@ceduvpn:~/ca$ ls
-private
-docker@ceduvpn:~/ca$ openssl genrsa -aes256 -out private/ca.pem 1024
-Generating RSA private key, 1024 bit long modulus
-.++++++
-............++++++
-e is 65537 (0x10001)
-Enter pass phrase for private/ca.pem:
-139794937226904:error:28069065:lib(40):UI_set_result:result too small:ui_lib.c:823:You must type in 4 to 1023 characters
-Enter pass phrase for private/ca.pem:
-139794937226904:error:28069065:lib(40):UI_set_result:result too small:ui_lib.c:823:You must type in 4 to 1023 characters
-Enter pass phrase for private/ca.pem:
-Verifying - Enter pass phrase for private/ca.pem:
-docker@ceduvpn:~/ca$ openssl rsa -in private/ca.pem -out private/ca.key
-Enter pass phrase for private/ca.pem:
-writing RSA key
-docker@ceduvpn:~/ca$ openssl req -new -key private/ca.pem -out private/ca.csr
-Enter pass phrase for private/ca.pem:
-You are about to be asked to enter information that will be incorporated
-into your certificate request.
-What you are about to enter is what is called a Distinguished Name or a DN.
-There are quite a few fields but you can leave some blank
-For some fields there will be a default value,
-If you enter '.', the field will be left blank.
------
-Country Name (2 letter code) [AU]:CN
-State or Province Name (full name) [Some-State]:JS
-Locality Name (eg, city) []:nanjing
-Organization Name (eg, company) [Internet Widgits Pty Ltd]:shein
-Organizational Unit Name (eg, section) []:web
-Common Name (e.g. server FQDN or YOUR name) []:npmca
-Email Address []:galxis.ling@gmail.com 
-
-Please enter the following 'extra' attributes
-to be sent with your certificate request
-A challenge password []:123456
-An optional company name []:shein 
-docker@ceduvpn:~/ca$ ls
-```
