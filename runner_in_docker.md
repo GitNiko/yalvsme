@@ -1,7 +1,10 @@
 gitlab-ci 接入 runner
 =========================================
 ## 开发流程
-![workflows](https://docs.gitlab.com/ee/ci/img/pipelines-goal.svg)
+![workflows](https://docs.gitlab.com/ee/ci/img/cicd_pipeline_infograph.png)
+
+![architecture](https://docs.gitlab.com/ee/ci/img/pipelines-goal.png)
+
 ## gitlab-ci中的概念
 ### Pipelines  
 几个`stage`串联在一起就构成了一个`pipelines`。每次执行构建的时候会启动这个`pipelines`。
@@ -53,7 +56,7 @@ android:
     - cd ./android && ./gradlew assembleRelease
   # 产物定义，这里的产物是可以被保存下来，不会因为任务执行完而被清空掉
   artifacts:
-    # 要保存的目录，改目录下的东西都会被保存下来
+    # 要保存的目录，该目录下的东西都会被保存下来
     paths:
     - android/app/build/outputs/apk/app-release.apk
     # 保质期,1天后就失效删除
