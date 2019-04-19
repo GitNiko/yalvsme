@@ -1,9 +1,7 @@
 gitlab-ci 接入 runner
 =========================================
-## 开发流程
-![workflows](https://docs.gitlab.com/ee/ci/img/cicd_pipeline_infograph.png)
-
-![architecture](https://docs.gitlab.com/ee/ci/img/pipelines-goal.png)
+## 工作流程
+![workflows](https://docs.gitlab.com/ee/ci/introduction/img/gitlab_workflow_example_11_9.png)
 
 ## gitlab-ci中的概念
 ### Pipelines  
