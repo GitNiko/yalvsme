@@ -16,7 +16,20 @@ gitlab-ci 接入 runner
 
 ## 安装docker runner
 本身gitlab中并不自带runner, 所以需要单独安装。两者通过gitlab内置的ci系统关联上, 项目仓库中的yaml配置了执行脚本，runner去执行yaml中的jobs内容。  
-runner可以在多种平台上安装，我这里选择`docker service`的安装方式。主要安装简单，直接用官方的`docker image`就可以了。安装步骤可以参考最后的参考链接。  
+runner可以在多种平台上安装，我这里选择`docker service`的安装方式。主要安装简单，直接用官方的`docker image`就可以了。安装步骤可以参考最后的参考链接。 
+
+#### 关于硬盘空间的问题
+
+很多时候安装docker后使用默认的安装路径，一般默认的系统盘大小有限，在执行runner期间会占用大量的硬盘空间，这个时候可能需要加盘，所以需要把docker默认的路径修改到新挂载的盘上。
+
+默认docker存放在`/var/lib/docker`下，如果要改到`/mymount`下，需要修改配置`/etc/docker/daemon.json`。改配置文件，默认是不存在的，需要自己创建，docker服务会默认读取这个路径下的配置文件。在文件增加配置，然后重启docker服务：
+
+```json
+{
+    "graph": "/mymount"
+} 
+```
+
 ## 注册runner
 主要步骤参考最后的链接。这里说下文档中未提及到的注册的token是从哪儿来的。  
 登录gitlab管理员账号查看 `setting => overview => runners`
@@ -121,4 +134,6 @@ deploy_apk:
 [git runner install](https://docs.gitlab.com/runner/install/index.html)  
 [install in docker](https://docs.gitlab.com/runner/install/docker.html)  
 [register runners](https://docs.gitlab.com/runner/register/index.html#docker)  
-[set volume](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#example-2-mount-a-host-directory-as-a-data-volume)
+[set volume](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#example-2-mount-a-host-directory-as-a-data-volume) 
+
+[更改加载盘](<https://stackoverflow.com/questions/24309526/how-to-change-the-docker-image-installation-directory/34731550#34731550>) 
