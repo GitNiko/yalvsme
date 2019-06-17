@@ -127,7 +127,34 @@ deploy_apk:
   [runners.cache]
 
 ```
-`volumes = ["/home/docker/gitlab_cache:/cache:rw"]` 第一个路径是host的路径(一般就是实际路径),第二个是映射的容器中的缓存路径
+`volumes = ["/home/docker/gitlab_cache:/cache:rw"]` 第一个路径是host的路径(一般就是实际路径),第二个是映射的容器中的缓存路径。
+
+默认每个人任务中设置的缓存是存放在容器中`/cache`目录下的，通过配置目录映射，可以把容器中的缓存放到另外的目录中：
+
+```yaml
+[[runners]]
+  name = "web runner"
+  executor = "docker"
+    [runners.docker]
+        tls_verify = false
+        image = "alpine:latest"
+        privileged = false
+        disable_entrypoint_overwrite = false
+        oom_kill_disable = false
+        disable_cache = true
+        volumes = ["/runnercache:/cache:rw"]
+        shm_size = 0
+```
+
+另外，建议把`docker`的`data-root`修改到额外挂在的盘上，因为主盘一般比较小。只需要新建文件`/etc/docker/daemon.json`，增加配置：
+
+```json
+{
+  "data-root": "/your_mnt/docker"
+}
+```
+
+
 
 ## 相关链接参考
 [pipelines and jobs](https://docs.gitlab.com/ee/ci/pipelines.html)  
